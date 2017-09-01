@@ -107,7 +107,6 @@ write_files:
     KUBELET_MAX_PODS=110
     DOCKER_OPTS=
     CUSTOM_CMD=/bin/true
-    KUBELET_REGISTER_SCHEDULABLE=true
     KUBELET_NODE_LABELS={{ GetKubernetesLabels . }}
     KUBELET_POD_INFRA_CONTAINER_IMAGE={{WrapAsVariable "kubernetesPodInfraContainerSpec"}}
     KUBELET_NODE_STATUS_UPDATE_FREQUENCY={{WrapAsVariable "kubernetesNodeStatusUpdateFrequency"}}

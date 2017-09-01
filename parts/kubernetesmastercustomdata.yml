@@ -201,8 +201,6 @@ write_files:
     KUBELET_REGISTER_NODE=--register-node=true
     KUBELET_REGISTER_WITH_TAINTS=--register-with-taints={{WrapAsVariable "registerWithTaints"}}
   {{end}}
-{{else}}
-    KUBELET_REGISTER_SCHEDULABLE={{WrapAsVariable "registerSchedulable"}}
 {{end}}
 - path: "/etc/systemd/system/kubelet.service"
   permissions: "0644"
@@ -241,7 +239,7 @@ write_files:
         AAD_ISSUER_HOST="sts.chinacloudapi.cn"
     fi
 
-    OIDC_ISSUER_URL="https://$AAD_ISSUER_HOST/$AAD_TENANT_ID/" 
+    OIDC_ISSUER_URL="https://$AAD_ISSUER_HOST/$AAD_TENANT_ID/"
     perl -pi -e "s|--oidc-client-id=\K(?=\")|$OIDC_CLIENT_ID| || s|--oidc-issuer-url=\K(?=\")|$OIDC_ISSUER_URL|" "/etc/kubernetes/manifests/kube-apiserver.yaml"
 {{else}}
     sed -i "/--oidc-client-id\|--oidc-issuer-url\|--oidc-username-claim/d" "/etc/kubernetes/manifests/kube-apiserver.yaml"

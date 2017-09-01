@@ -76,9 +76,9 @@
     "nameSuffix": "[parameters('nameSuffix')]",
     "orchestratorName": "k8s",
     "fqdnEndpointSuffix":"[parameters('fqdnEndpointSuffix')]",
-    "osImageOffer": "[parameters('osImageOffer')]", 
-    "osImagePublisher": "[parameters('osImagePublisher')]", 
-    "osImageSKU": "[parameters('osImageSKU')]", 
+    "osImageOffer": "[parameters('osImageOffer')]",
+    "osImagePublisher": "[parameters('osImagePublisher')]",
+    "osImageSKU": "[parameters('osImageSKU')]",
     "osImageVersion": "[parameters('osImageVersion')]",
     "resourceGroup": "[resourceGroup().name]",
 {{if not IsHostedMaster}}
@@ -148,12 +148,6 @@
     "dockerBridgeCidr": "[parameters('dockerBridgeCidr')]",
 {{if IsKubernetesVersionGe "1.6.0"}}
     "registerWithTaints": "node-role.kubernetes.io/master=true:NoSchedule",
-{{else}}
-    {{if HasLinuxAgents}}
-    "registerSchedulable": "false",
-    {{else}}
-    "registerSchedulable": "true",
-    {{end}}
 {{end}}
 {{if not IsHostedMaster }}
     "nsgName": "[concat(variables('masterVMNamePrefix'), 'nsg')]",

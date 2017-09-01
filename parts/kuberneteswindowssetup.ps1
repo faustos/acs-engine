@@ -103,7 +103,7 @@ Patch-WinNATBinary()
         $winnatsys = "$env:SystemRoot\System32\drivers\winnat.sys"
         Stop-Service winnat
         takeown /f $winnatsys
-        icacls $winnatsys /grant "Administrators:(F)"    
+        icacls $winnatsys /grant "Administrators:(F)"
         Copy-Item $winnatcurr $winnatsys
         bcdedit /set TESTSIGNING on
     }
@@ -132,7 +132,7 @@ Write-AzureConfig()
 }
 "@
 
-    $azureConfig | Out-File -encoding ASCII -filepath "$azureConfigFile"    
+    $azureConfig | Out-File -encoding ASCII -filepath "$azureConfigFile"
 }
 
 function
@@ -162,14 +162,14 @@ users:
     client-key-data: "$AgentKey"
 "@
 
-    $kubeConfig | Out-File -encoding ASCII -filepath "$kubeConfigFile"    
+    $kubeConfig | Out-File -encoding ASCII -filepath "$kubeConfigFile"
 }
 
 function
 New-InfraContainer()
 {
     cd $global:KubeDir
-    docker build -t kubletwin/pause . 
+    docker build -t kubletwin/pause .
 }
 
 function
@@ -177,7 +177,7 @@ Write-KubernetesStartFiles($podCIDR)
 {
     $KubeletArgList = @("--hostname-override=`$global:AzureHostname","--pod-infra-container-image=kubletwin/pause","--resolv-conf=""""""""","--api-servers=https://`${global:MasterIP}:443","--kubeconfig=c:\k\config")
     $KubeletCommandLine = @"
-c:\k\kubelet.exe --hostname-override=`$global:AzureHostname --pod-infra-container-image=kubletwin/pause --resolv-conf="" --allow-privileged=true --enable-debugging-handlers --api-servers=https://`${global:MasterIP}:443 --cluster-dns=`$global:KubeDnsServiceIp --cluster-domain=cluster.local  --kubeconfig=c:\k\config --hairpin-mode=promiscuous-bridge --v=2 --azure-container-registry-config=c:\k\azure.json --runtime-request-timeout=10m
+c:\k\kubelet.exe --hostname-override=`$global:AzureHostname --pod-infra-container-image=kubletwin/pause --resolv-conf="" --allow-privileged=true --enable-debugging-handlers --api-servers=https://`${global:MasterIP}:443 --cluster-dns=`$global:KubeDnsServiceIp --cluster-domain=cluster.local  --kubeconfig=c:\k\config --hairpin-mode=promiscuous-bridge  --azure-container-registry-config=c:\k\azure.json --runtime-request-timeout=10m
 "@
 
     if ($global:KubeBinariesVersion -ge "1.6.0")
@@ -223,7 +223,7 @@ Set-DockerNetwork(`$podCIDR)
         # create new transparent network
         docker network create --driver=transparent --subnet=`$podCIDR --gateway=`$podGW `$global:TransparentNetworkName
 
-        
+
         `$vmswitch = get-vmSwitch  | ? SwitchType -EQ External
         # create host vnic for gateway ip to forward the traffic and kubeproxy to listen over VIP
         Add-VMNetworkAdapter -ManagementOS -Name forwarder -SwitchName `$vmswitch.Name
@@ -266,15 +266,15 @@ try
         {
             Write-Host "Sleeping for 10s, and then waiting to discover pod CIDR"
             Start-Sleep -sec 10
-            
+
             `$podCIDR=Get-PodCIDR
             `$podCidrDiscovered=Test-PodCIDR(`$podCIDR)
         }
-    
+
         # stop the kubelet process now that we have our CIDR, discard the process output
         `$process | Stop-Process | Out-Null
     }
-    
+
     Set-DockerNetwork(`$podCIDR)
 
     # startup the service
@@ -295,7 +295,7 @@ catch
 
     $kubeProxyStartStr = @"
 `$env:INTERFACE_TO_ADD_SERVICE_IP="vEthernet (forwarder)"
-c:\k\kube-proxy.exe --v=3 --proxy-mode=userspace --hostname-override=$AzureHostname --kubeconfig=c:\k\config
+c:\k\kube-proxy.exe --proxy-mode=userspace --hostname-override=$AzureHostname --kubeconfig=c:\k\config
 "@
 
     $kubeProxyStartStr | Out-File -encoding ASCII -filepath $global:KubeProxyStartFile
@@ -364,7 +364,7 @@ Set-Explorer
 try
 {
     # Set to false for debugging.  This will output the start script to
-    # c:\AzureData\CustomDataSetupScript.log, and then you can RDP 
+    # c:\AzureData\CustomDataSetupScript.log, and then you can RDP
     # to the windows machine, and run the script manually to watch
     # the output.
     if ($true) {
@@ -401,7 +401,7 @@ try
             Restart-Computer
         }
     }
-    else 
+    else
     {
         # keep for debugging purposes
         Write-Log ".\CustomDataSetupScript.ps1 -MasterIP $MasterIP -KubeDnsServiceIp $KubeDnsServiceIp -MasterFQDNPrefix $MasterFQDNPrefix -Location $Location -AgentKey $AgentKey -AzureHostname $AzureHostname -AADClientId $AADClientId -AADClientSecret $AADClientSecret"

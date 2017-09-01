@@ -11,7 +11,7 @@ spec:
   containers:
     - name: "kube-apiserver"
       image: "<kubernetesHyperkubeSpec>"
-      command: 
+      command:
         - "/hyperkube"
         - "apiserver"
         - "--admission-control=NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota"
@@ -33,7 +33,6 @@ spec:
         - "--oidc-issuer-url="
         - "--oidc-username-claim=oid"
         - "--storage-backend=etcd2"
-        - "--v=4"
         - "<kubernetesEnableRbac>"
       volumeMounts:
         - name: "etc-kubernetes"

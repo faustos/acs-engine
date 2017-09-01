@@ -16,7 +16,6 @@ spec:
         - "scheduler"
         - "--kubeconfig=/var/lib/kubelet/kubeconfig"
         - "--leader-elect=true"
-        - "--v=2"
       volumeMounts:
         - name: "etc-kubernetes"
           mountPath: "/etc/kubernetes"

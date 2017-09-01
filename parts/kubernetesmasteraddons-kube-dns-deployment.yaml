@@ -76,7 +76,6 @@ spec:
       - args:
         - "--domain=cluster.local."
         - "--dns-port=10053"
-        - "--v=2"
         - "--config-dir=/kube-dns-config"
         image: <kubernetesKubeDNSSpec>
         livenessProbe:
